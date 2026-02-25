@@ -3,47 +3,55 @@ import ast
 
 def parse_code(code_string):
     """
-    Parses and preprocesses Python code using AST.
+    This function checks Python code for syntax errors.
+
+    Parameters:
+        code_string (str): Python code given as string
+
+    Returns:
+        dict: Contains success status and error details (if any)
     """
 
     try:
+        # Try to convert code into AST (check syntax)
         tree = ast.parse(code_string)
-        formatted_code = ast.unparse(tree)
 
         return {
             "success": True,
             "message": "Code parsed successfully.",
-            "formatted_code": formatted_code,
             "tree": tree
         }
 
     except SyntaxError as e:
         return {
             "success": False,
-            "error_type": "SyntaxError",
-            "message": str(e),
-            "line_number": e.lineno
+            "error": {
+                "type": "SyntaxError",
+                "message": str(e),
+                "line_number": e.lineno
+            }
         }
 
 
-if __name__ == "__main__":
+# Testing Block
 
-    sample_code = """
-def add(a,b):
-    return a+b
-"""
+# if __name__ == "__main__":
 
-    result = parse_code(sample_code)
+#     sample_code = """
+# def calculate_sum(a, b):
+#     result = a + b
+#     if result > 10:
+#         print("Greater than 10")
+#     return result
+# """
 
-    if result["success"]:
-        print("Status:", result["message"])
-        print("\nFormatted Code:\n")
-        print(result["formatted_code"])
+#     result = parse_code(sample_code)
 
-        #print("\nAST Structure:\n")
-        #print(ast.dump(result["tree"], indent=4))
+#     print("\n--- Parser Output ---\n")
 
-    else:
-        print("Error Type:", result["error_type"])
-        print("Line Number:", result["line_number"])
-        print("Message:", result["message"])
+#     if result["success"]:
+#         print(result["message"])
+#     else:
+#         print("Error Type:", result["error"]["type"])
+#         print("Line Number:", result["error"]["line_number"])
+#         print("Message:", result["error"]["message"])
