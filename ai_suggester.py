@@ -18,22 +18,25 @@ prompt_template = PromptTemplate(
     template="""
 You are an experienced coding teacher.
 
-Analyze the following Python code and provide:
+Analyze the following Python code and provide feedback in plain text only.
+No markdown, no hashtags (#), no asterisks (*), no code blocks.
 
-1. Syntax or logical errors (if any)
-2. Suggestions for improvement
-3. Explanation for each suggestion
-4. Time complexity
-5. Space complexity
-6. Naming convention issues as per PEP8 guidelines:
-   - Variables and functions should follow snake_case
-   - Class names should follow PascalCase
+Your response must have exactly these sections:
 
-Clearly explain why each naming convention issue is incorrect
-and suggest the corrected version.
+ANALYSIS:
+1. Errors (if any)
+2. Improvements (max 3 points)
+3. Time Complexity
+4. Space Complexity
+5. PEP8 issues (if any)
+
+CORRECTED_CODE:
+Write only the corrected version of the code here. No explanation.
 
 Code:
 {code_string}
+
+Remember: Plain text only. No special formatting. Be concise.
 """
 )
 
@@ -44,36 +47,4 @@ def get_ai_suggestion(code_string):
 
     result = model.invoke(formatted_prompt)
 
-    print("\n--- AI Technical Review ---\n")
-    print(result.content)
-
-
-if __name__ == "__main__":
-
-    sample_code = """
-class studentdata:
-    def CalculateSum(a, b):
-        resultValue = a + b
-        return resultValue
-"""
-
-    get_ai_suggestion(sample_code)
-
-
-
-# Testing Block
-
-
-# if __name__ == "__main__":
-
-#     sample_code = """
-# number = 10
-
-
-# if number % 2 == 0:
-#     print("Even")
-# else:
-#     print("Odd")
-# """
-
-#     get_ai_suggestion(sample_code)
+    return result

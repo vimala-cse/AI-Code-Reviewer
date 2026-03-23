@@ -61,15 +61,16 @@ class ErrorDetector(ast.NodeVisitor):
 
         self.generic_visit(node)
 
-    # naming convention is handled in AI suggester file
-
     # Final Report
     def generate_report(self):
+
+        # Built-in functions ignore చేయాలి
+        builtins = set(dir(__builtins__)) if isinstance(__builtins__, dict) else set(dir(__builtins__))
 
         # Unused variables
         unused_vars = self.defined - self.used
         for var in unused_vars:
-            if var not in self.imported:
+            if var not in self.imported and var not in builtins:
                 self.issues.append(f"Unused variable: '{var}'")
                 self.score -= 5
 
@@ -86,61 +87,3 @@ class ErrorDetector(ast.NodeVisitor):
             "issues": self.issues,
             "score": self.score
         }
-
-# Testing Block
-
-# if __name__ == "__main__":
-
-#     sample_code = """
-# number = 10
-# x=5
-# while True:
-#     if number % 2 == 0:
-#         print("Even")
-#     else:
-#         print("odd")
-
-# """
-
-#     tree = ast.parse(sample_code)
-
-#     detector = ErrorDetector()
-#     detector.visit(tree)
-
-#     issues = detector.report_unused()
-
-#     print("\n--- Output ---\n")
-
-#     if issues:
-#         for issue in issues:
-#             print("-", issue)
-#     else:
-#         print("No issues detected.")
-
-# Testing block
-# if __name__ == "__main__":
-
-#     sample_code = """
-# import os
-
-# number = 10
-
-# def CalculateSum(a, b):
-#     result = a + b
-#     while True:
-#         print(result)
-#     return result
-# """
-
-#     tree = ast.parse(sample_code)
-#     detector = ErrorDetector()
-#     detector.visit(tree)
-#     issues = detector.generate_report()
-
-#     print("\n--- Analysis Result ---\n")
-
-#     if issues:
-#         for issue in issues:
-#             print("-", issue)
-#     else:
-#         print("No issues detected.")
