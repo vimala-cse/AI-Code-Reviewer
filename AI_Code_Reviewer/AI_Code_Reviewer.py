@@ -6,6 +6,7 @@ from AI_Code_Reviewer.components.analyze import analyze_page
 from AI_Code_Reviewer.components.about import about_page
 from AI_Code_Reviewer.components.login import login_page
 from AI_Code_Reviewer.components.signup import signup_page
+from AI_Code_Reviewer.components.history import history_page, HistoryState
 from AI_Code_Reviewer.state import AppState
 
 def home():
@@ -71,9 +72,23 @@ def signup():
         min_height="100vh",
     )
 
+def history():
+    return rx.box(
+        navbar(),
+        history_page(),
+        footer(),
+        background_color=rx.cond(
+            AppState.is_dark,
+            "#0f0f1a",
+            "#ffffff",
+        ),
+        min_height="100vh",
+    )
+
 app = rx.App()
 app.add_page(home, route="/")
 app.add_page(analyze, route="/analyze")
 app.add_page(about, route="/about")
 app.add_page(login, route="/login")
 app.add_page(signup, route="/signup")
+app.add_page(history, route="/history")
