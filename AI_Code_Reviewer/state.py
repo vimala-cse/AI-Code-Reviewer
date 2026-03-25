@@ -48,8 +48,20 @@ print(calculate_sum(5, 3))"""
             output = analyze_code_pipeline(self.code_input)
 
             if output.get("syntax_error"):
-                self.result = f"❌ Syntax Error: {output['syntax_error']}\nLine: {output['line_number']}"
-                self.corrected_code = ""
+                ai_text = output.get("ai_suggestions", "")
+
+                if "CORRECTED_CODE:" in ai_text:
+                    analysis = ai_text.split("CORRECTED_CODE:")[0].replace("ANALYSIS:", "").strip()
+                    self.corrected_code = ai_text.split("CORRECTED_CODE:")[1].strip()
+                elif "CORRECTED CODE:" in ai_text:
+                    analysis = ai_text.split("CORRECTED CODE:")[0].replace("ANALYSIS:", "").strip()
+                    self.corrected_code = ai_text.split("CORRECTED CODE:")[1].strip()
+                else:
+                    analysis = ai_text.strip()
+                    self.corrected_code = ""
+
+                self.result = f"❌ Syntax Error: {output['syntax_error']}\nLine: {output['line_number']}\n\n📊 Score: 0/100\n\n💡 AI Suggestions:\n{analysis}"
+
             else:
                 issues_text = ""
                 if output["issues"]:

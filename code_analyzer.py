@@ -10,12 +10,14 @@ def analyze_code_pipeline(code):
     syntax_result = parse_code(code)
 
     if not syntax_result["success"]:
+        ai_result = get_ai_suggestion(code)  # ← AI call add chesamu
+        ai_text = ai_result.content if hasattr(ai_result, 'content') else str(ai_result)
         return {
             "syntax_error": syntax_result["error"]["message"],
             "line_number": syntax_result["error"]["line_number"],
             "score": 0,
             "issues": [],
-            "ai_suggestions": ""
+            "ai_suggestions": ai_text  # ← AI text pass chestundi
         }
 
     # Step 2: Get parsed tree

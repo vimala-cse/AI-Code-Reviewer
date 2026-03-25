@@ -40,32 +40,41 @@ def analyze_page():
                 padding="16px",
             ),
 
-            # 🔹 Analyze button + Loading spinner
+            # 🔹 Analyze button
             rx.hstack(
                 rx.button(
-                    rx.cond(
-                        AppState.is_loading,
-                        rx.hstack(
-                            rx.spinner(size="3", color="white"),
-                            rx.text("Analyzing...", color="white"),
-                            spacing="2",
-                            align="center",
-                        ),
-                        rx.text("Analyze Code"),
-                    ),
+                    rx.text("Analyze Code"),
                     on_click=AppState.analyze_code,
-                    background_color=rx.cond(
-                        AppState.is_loading, "#3b82f6", "#60a5fa"
-                    ),
+                    background_color="#60a5fa",
                     color="white",
                     padding="12px 32px",
                     border_radius="8px",
                     font_size="1em",
                     _hover={"background_color": "#3b82f6"},
-                    disabled=AppState.is_loading,
                 ),
                 spacing="4",
                 align="center",
+            ),
+
+            # 🔹 Loading animation
+            rx.cond(
+                AppState.is_loading,
+                rx.box(
+                    rx.vstack(
+                        rx.spinner(size="3", color="#60a5fa"),
+                        rx.text(
+                            "Analyzing your code...",
+                            color="#60a5fa",
+                            font_size="1em",
+                        ),
+                        align="center",
+                        spacing="3",
+                    ),
+                    width="100%",
+                    padding="20px",
+                    display="flex",
+                    justify_content="center",
+                ),
             ),
 
             # 🔹 Results box
