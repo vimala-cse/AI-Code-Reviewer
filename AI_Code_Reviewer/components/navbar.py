@@ -21,8 +21,6 @@ def nav_link(text: str, href: str) -> rx.Component:
 
 def navbar():
     return rx.flex(
-
-        # 🔹 Left - Logo
         rx.link(
             rx.hstack(
                 rx.image(
@@ -42,57 +40,11 @@ def navbar():
             href="/",
             text_decoration="none",
         ),
-
-        # 🔹 Right - Nav links + Login + Signup + Toggle
         rx.hstack(
             nav_link("Home", "/"),
             nav_link("Analyze", "/analyze"),
             nav_link("History", "/history"),
             nav_link("About", "/about"),
-
-            # Divider
-            rx.divider(
-                orientation="vertical",
-                height="20px",
-                border_color=rx.cond(AppState.is_dark, "#444", "#ccc"),
-            ),
-
-            # Login button
-            rx.link(
-                rx.button(
-                    "Login",
-                    background_color="transparent",
-                    color=rx.cond(AppState.is_dark, "white", "#1a1a2e"),
-                    border=rx.cond(
-                        AppState.is_dark,
-                        "1px solid #444",
-                        "1px solid #ccc",
-                    ),
-                    border_radius="8px",
-                    padding="6px 16px",
-                    font_size="0.9em",
-                    _hover={"border_color": "#60a5fa", "color": "#60a5fa"},
-                ),
-                href="/login",
-                text_decoration="none",
-            ),
-
-            # Sign Up button
-            rx.link(
-                rx.button(
-                    "Sign Up",
-                    background_color="#60a5fa",
-                    color="white",
-                    border_radius="8px",
-                    padding="6px 16px",
-                    font_size="0.9em",
-                    _hover={"background_color": "#3b82f6"},
-                ),
-                href="/signup",
-                text_decoration="none",
-            ),
-
-            # 🌙☀️ Toggle button
             rx.button(
                 rx.cond(
                     AppState.is_dark,
@@ -106,11 +58,9 @@ def navbar():
                 padding="4px",
                 _hover={"opacity": "0.7"},
             ),
-
             spacing="6",
             align="center",
         ),
-
         justify="between",
         align="center",
         width="100%",
