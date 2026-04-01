@@ -1,11 +1,11 @@
 import reflex as rx
 from AI_Code_Reviewer.state import AppState
 
-def analyze_page():
+
+def analyze_page() -> rx.Component:
     return rx.box(
         rx.vstack(
-
-            # 🔹 Page title
+            # Title
             rx.heading(
                 "Analyze Your Code",
                 size="8",
@@ -17,7 +17,7 @@ def analyze_page():
                 font_size="1em",
             ),
 
-            # 🔹 Code input area
+            # Code input textarea
             rx.text_area(
                 value=AppState.code_input,
                 on_change=AppState.set_code,
@@ -27,9 +27,7 @@ def analyze_page():
                 height="300px",
                 font_family="monospace",
                 font_size="0.95em",
-                background_color=rx.cond(
-                    AppState.is_dark, "#2d2d44", "#f8f9fa"
-                ),
+                background_color=rx.cond(AppState.is_dark, "#2d2d44", "#f8f9fa"),
                 color=rx.cond(AppState.is_dark, "#ffffff", "#1a1a2e"),
                 border=rx.cond(
                     AppState.is_dark,
@@ -40,7 +38,7 @@ def analyze_page():
                 padding="16px",
             ),
 
-            # 🔹 Analyze button
+            # Analyze button
             rx.hstack(
                 rx.button(
                     rx.text("Analyze Code"),
@@ -50,13 +48,14 @@ def analyze_page():
                     padding="12px 32px",
                     border_radius="8px",
                     font_size="1em",
+                    cursor="pointer",
                     _hover={"background_color": "#3b82f6"},
                 ),
                 spacing="4",
                 align="center",
             ),
 
-            # 🔹 Loading animation
+            # Loading spinner
             rx.cond(
                 AppState.is_loading,
                 rx.box(
@@ -77,7 +76,7 @@ def analyze_page():
                 ),
             ),
 
-            # 🔹 Results box
+            # ✅ RESULT ONLY (Score circle removed)
             rx.cond(
                 AppState.result != "",
                 rx.box(
@@ -89,9 +88,7 @@ def analyze_page():
                     ),
                     width="100%",
                     padding="20px",
-                    background_color=rx.cond(
-                        AppState.is_dark, "#2d2d44", "#f8f9fa"
-                    ),
+                    background_color=rx.cond(AppState.is_dark, "#2d2d44", "#f8f9fa"),
                     border_radius="8px",
                     border=rx.cond(
                         AppState.is_dark,
@@ -102,75 +99,35 @@ def analyze_page():
                 ),
             ),
 
-            # 🔹 2 Column layout
+            # Side-by-side code panels (same as before)
             rx.cond(
                 AppState.result != "",
                 rx.flex(
-
-                    # Left - Your Code
                     rx.vstack(
                         rx.text(
                             "Your Code",
                             font_weight="bold",
                             color=rx.cond(AppState.is_dark, "white", "#1a1a2e"),
-                            font_size="1em",
                         ),
                         rx.box(
                             rx.text(
                                 AppState.code_input,
                                 font_family="monospace",
-                                font_size="0.9em",
-                                color=rx.cond(AppState.is_dark, "#ffffff", "#1a1a2e"),
                                 white_space="pre-wrap",
                             ),
                             width="100%",
                             padding="16px",
-                            background_color=rx.cond(
-                                AppState.is_dark, "#2d2d44", "#f8f9fa"
-                            ),
+                            background_color=rx.cond(AppState.is_dark, "#2d2d44", "#f8f9fa"),
                             border_radius="8px",
-                            border=rx.cond(
-                                AppState.is_dark,
-                                "1px solid #444",
-                                "1px solid #ddd",
-                            ),
-                            min_height="200px",
                         ),
                         width="48%",
-                        align_items="start",
-                        spacing="2",
                     ),
 
-                    # Right - Corrected Code + Copy button
                     rx.vstack(
-                        rx.hstack(
-                            rx.text(
-                                "Corrected Code",
-                                font_weight="bold",
-                                color="#60a5fa",
-                                font_size="1em",
-                            ),
-                            rx.cond(
-                                AppState.corrected_code != "",
-                                rx.button(
-                                    rx.hstack(
-                                        rx.icon("copy", size=14),
-                                        rx.text("Copy", font_size="0.8em"),
-                                        spacing="1",
-                                        align="center",
-                                    ),
-                                    on_click=rx.set_clipboard(AppState.corrected_code),
-                                    background_color="transparent",
-                                    border="1px solid #60a5fa",
-                                    color="#60a5fa",
-                                    border_radius="6px",
-                                    padding="4px 10px",
-                                    _hover={"background_color": "#60a5fa", "color": "white"},
-                                ),
-                            ),
-                            justify="between",
-                            width="100%",
-                            align="center",
+                        rx.text(
+                            "Corrected Code",
+                            font_weight="bold",
+                            color="#60a5fa",
                         ),
                         rx.box(
                             rx.text(
@@ -180,31 +137,18 @@ def analyze_page():
                                     "Corrected code will appear here...",
                                 ),
                                 font_family="monospace",
-                                font_size="0.9em",
-                                color=rx.cond(AppState.is_dark, "#c3e88d", "#1a1a2e"),
                                 white_space="pre-wrap",
                             ),
                             width="100%",
                             padding="16px",
-                            background_color=rx.cond(
-                                AppState.is_dark, "#1a2d1a", "#f0fff0"
-                            ),
+                            background_color=rx.cond(AppState.is_dark, "#1a2d1a", "#f0fff0"),
                             border_radius="8px",
-                            border=rx.cond(
-                                AppState.is_dark,
-                                "1px solid #3a5a3a",
-                                "1px solid #90ee90",
-                            ),
-                            min_height="200px",
                         ),
                         width="48%",
-                        align_items="start",
-                        spacing="2",
                     ),
 
                     justify="between",
                     width="100%",
-                    spacing="4",
                 ),
             ),
 
@@ -217,8 +161,6 @@ def analyze_page():
         display="flex",
         justify_content="center",
         width="100%",
-        background_color=rx.cond(
-            AppState.is_dark, "#0f0f1a", "#ffffff"
-        ),
+        background_color=rx.cond(AppState.is_dark, "#0f0f1a", "#ffffff"),
         min_height="100vh",
     )

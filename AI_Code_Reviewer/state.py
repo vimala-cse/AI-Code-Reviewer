@@ -1,12 +1,9 @@
 import reflex as rx
-import sys
-import os
 import datetime
-
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 
 from AI_Code_Reviewer.code_analyzer import analyze_code_pipeline
 from AI_Code_Reviewer.models import AnalysisHistory
+
 
 class AppState(rx.State):
     is_dark: bool = True
@@ -34,15 +31,16 @@ print(calculate_sum(5, 3))"""
     def set_code_from_history(self, code: str):
         self.code_input = code
 
-    def analyze_code(self):
+    async def analyze_code(self):
         if not self.code_input.strip():
             self.result = "Please paste some code first!"
             self.corrected_code = ""
             return
 
         self.is_loading = True
-        self.result = "Analyzing..."
+        self.result = ""
         self.corrected_code = ""
+        yield  # UI instantly shows spinner
 
         try:
             output = analyze_code_pipeline(self.code_input)
@@ -60,7 +58,12 @@ print(calculate_sum(5, 3))"""
                     analysis = ai_text.strip()
                     self.corrected_code = ""
 
-                self.result = f"❌ Syntax Error: {output['syntax_error']}\nLine: {output['line_number']}\n\n📊 Score: 0/100\n\n💡 AI Suggestions:\n{analysis}"
+                self.result = (
+                    f"❌ Syntax Error: {output['syntax_error']}\n"
+                    f"Line: {output['line_number']}\n\n"
+                    f"📊 Score: 0/100\n\n"
+                    f"💡 AI Suggestions:\n{analysis}"
+                )
 
             else:
                 issues_text = ""
@@ -90,14 +93,22 @@ print(calculate_sum(5, 3))"""
                         AnalysisHistory(
                             code=self.code_input,
                             score=output["score"],
-                            issues=", ".join(output["issues"]) if output["issues"] else "No issues found",
+                            issues=(
+                                ", ".join(output["issues"])
+                                if output["issues"]
+                                else "No issues found"
+                            ),
                             ai_suggestions=analysis,
-                            timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+                            timestamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
                         )
                     )
                     session.commit()
 
-                self.result = f"📊 Score: {output['score']}/100\n{issues_text}\n💡 AI Suggestions:\n{analysis}"
+                self.result = (
+                    f"📊 Score: {output['score']}/100\n"
+                    f"{issues_text}\n"
+                    f"💡 AI Suggestions:\n{analysis}"
+                )
                 self.corrected_code = corrected
 
         except Exception as e:
@@ -105,3 +116,4 @@ print(calculate_sum(5, 3))"""
             self.corrected_code = ""
 
         self.is_loading = False
+        yield  # UI shows final result

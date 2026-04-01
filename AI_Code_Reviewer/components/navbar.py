@@ -1,6 +1,7 @@
 import reflex as rx
 from AI_Code_Reviewer.state import AppState
 
+
 def nav_link(text: str, href: str) -> rx.Component:
     return rx.link(
         text,
@@ -19,7 +20,8 @@ def nav_link(text: str, href: str) -> rx.Component:
         _hover={"color": "#60a5fa"},
     )
 
-def navbar():
+
+def navbar() -> rx.Component:
     return rx.flex(
         rx.link(
             rx.hstack(
@@ -45,6 +47,7 @@ def navbar():
             nav_link("Analyze", "/analyze"),
             nav_link("History", "/history"),
             nav_link("About", "/about"),
+            nav_link("FAQ", "/faq"),
             rx.button(
                 rx.cond(
                     AppState.is_dark,
