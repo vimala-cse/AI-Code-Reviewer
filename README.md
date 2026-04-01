@@ -4,7 +4,7 @@ An AI-powered code review tool built with Python and Reflex framework.
 
 ## Live Demo
 
-Deployed App: https://ai-code-reviewer-gold-moon.reflex.run
+Deployed App: https://ai-code-reviewer-red-sun.reflex.run
 
 ## Features
 
@@ -22,19 +22,7 @@ Deployed App: https://ai-code-reviewer-gold-moon.reflex.run
 - Database: PostgreSQL (Neon.tech)
 - Deployment: Reflex Cloud
 
-## Project Structure
-AI_Code_Reviewer/
-├── components/
-│   ├── analyze.py
-│   ├── history.py
-│   ├── navbar.py
-│   ├── hero.py
-│   ├── about.py
-│   └── footer.py
-├── state.py
-├── models.py
-├── code_analyzer.py
-└── AI_Code_Reviewer.py
 ## Setup and Installation
+
 pip install -r requirements.txt
 reflex run
