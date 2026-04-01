@@ -24,5 +24,5 @@ Deployed App: https://ai-code-reviewer-red-sun.reflex.run
 
 ## Setup and Installation
 
-pip install -r requirements.txt
-reflex run
+- pip install -r requirements.txt
+- reflex run
