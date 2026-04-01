@@ -5,7 +5,6 @@ from AI_Code_Reviewer.state import AppState
 def analyze_page() -> rx.Component:
     return rx.box(
         rx.vstack(
-            # Title
             rx.heading(
                 "Analyze Your Code",
                 size="8",
@@ -17,7 +16,6 @@ def analyze_page() -> rx.Component:
                 font_size="1em",
             ),
 
-            # Code input textarea
             rx.text_area(
                 value=AppState.code_input,
                 on_change=AppState.set_code,
@@ -38,7 +36,6 @@ def analyze_page() -> rx.Component:
                 padding="16px",
             ),
 
-            # Analyze button
             rx.hstack(
                 rx.button(
                     rx.text("Analyze Code"),
@@ -55,7 +52,6 @@ def analyze_page() -> rx.Component:
                 align="center",
             ),
 
-            # Loading spinner
             rx.cond(
                 AppState.is_loading,
                 rx.box(
@@ -76,7 +72,6 @@ def analyze_page() -> rx.Component:
                 ),
             ),
 
-            # ✅ RESULT ONLY (Score circle removed)
             rx.cond(
                 AppState.result != "",
                 rx.box(
@@ -99,7 +94,6 @@ def analyze_page() -> rx.Component:
                 ),
             ),
 
-            # Side-by-side code panels (same as before)
             rx.cond(
                 AppState.result != "",
                 rx.flex(
@@ -114,6 +108,7 @@ def analyze_page() -> rx.Component:
                                 AppState.code_input,
                                 font_family="monospace",
                                 white_space="pre-wrap",
+                                color=rx.cond(AppState.is_dark, "#ffffff", "#1a1a2e"),
                             ),
                             width="100%",
                             padding="16px",
@@ -124,10 +119,29 @@ def analyze_page() -> rx.Component:
                     ),
 
                     rx.vstack(
-                        rx.text(
-                            "Corrected Code",
-                            font_weight="bold",
-                            color="#60a5fa",
+                        rx.hstack(
+                            rx.text(
+                                "Corrected Code",
+                                font_weight="bold",
+                                color="#60a5fa",
+                            ),
+                            rx.button(
+                                rx.icon("copy", size=14),
+                                on_click=rx.set_clipboard(AppState.corrected_code),
+                                background_color="transparent",
+                                color=rx.cond(AppState.is_dark, "#aaa", "#555"),
+                                border=rx.cond(
+                                    AppState.is_dark,
+                                    "1px solid #444",
+                                    "1px solid #ccc",
+                                ),
+                                border_radius="6px",
+                                padding="4px 8px",
+                                font_size="0.8em",
+                                _hover={"color": "#60a5fa", "border_color": "#60a5fa"},
+                            ),
+                            spacing="3",
+                            align="center",
                         ),
                         rx.box(
                             rx.text(
@@ -138,6 +152,7 @@ def analyze_page() -> rx.Component:
                                 ),
                                 font_family="monospace",
                                 white_space="pre-wrap",
+                                color=rx.cond(AppState.is_dark, "#c3e88d", "#1a1a2e"),
                             ),
                             width="100%",
                             padding="16px",
@@ -163,4 +178,4 @@ def analyze_page() -> rx.Component:
         width="100%",
         background_color=rx.cond(AppState.is_dark, "#0f0f1a", "#ffffff"),
         min_height="100vh",
-    )
+    )    
